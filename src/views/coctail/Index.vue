@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, watch } from 'vue'
+import { computed, onMounted, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import router from '@/router'
 
@@ -13,25 +13,28 @@ const route = useRoute()
 
 const store = useCoctailStore()
 
-const getCoctailNameFromUrl = () => route.fullPath.split('coctails')[1].slice(1)
-
 const isCoctailExist = (coctailName: string) => {
   return AVAILABLE_COCTAILS_CODES.some(
     (coctail) => coctail.name.toLowerCase() === coctailName.toLowerCase()
   )
 }
 
-const normolizePath = () => {
-  const coctailName = getCoctailNameFromUrl()
+const coctailCode = computed(() => {
+  const code = route.params.coctailCode
+  if (Array.isArray(code)) return code[0]
+  return code
+})
 
-  const coctailPath = isCoctailExist(coctailName) ? coctailName : AVAILABLE_COCTAILS_CODES[0].path
+const normolizePath = () => {
+  const coctailPath = isCoctailExist(coctailCode.value)
+    ? coctailCode.value
+    : AVAILABLE_COCTAILS_CODES[0].path
 
   router.replace('/coctails/' + coctailPath)
 }
 
 const loadCoctail = () => {
-  const coctailName = getCoctailNameFromUrl()
-  store.getCoctail(coctailName)
+  store.getCoctail(coctailCode.value)
 }
 
 onMounted(() => {
@@ -39,7 +42,7 @@ onMounted(() => {
   loadCoctail()
 })
 
-watch(() => route.fullPath, loadCoctail)
+watch(() => coctailCode.value, loadCoctail)
 </script>
 
 <template>

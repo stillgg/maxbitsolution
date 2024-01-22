@@ -1,4 +1,4 @@
-import { api } from '@/helpers/api'
+import { api } from './providers/api'
 import type { AxiosPromise } from 'axios'
 
 interface Drink {
