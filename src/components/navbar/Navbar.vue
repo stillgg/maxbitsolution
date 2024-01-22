@@ -1,8 +1,5 @@
 <script lang="ts" setup>
-import { useRoute } from 'vue-router'
 import { AVAILABLE_COCTAILS_CODES } from '@/constants/index'
-
-const route = useRoute()
 </script>
 
 <template>
@@ -11,11 +8,12 @@ const route = useRoute()
       <RouterLink
         v-for="coctailCode of AVAILABLE_COCTAILS_CODES"
         :to="`/coctails/${coctailCode.path}`"
+        v-slot="{ isActive }"
       >
         <li
           class="coctail"
           :class="{
-            active: `/coctails/${coctailCode.path}` === route.fullPath
+            active: isActive
           }"
         >
           {{ coctailCode.name }}

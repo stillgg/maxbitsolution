@@ -35,7 +35,7 @@ export const useCoctailStore = defineStore('coctail', {
       } catch (err) {
         this.errorMessage = ERROR_MESSAGE
       } finally {
-        this.isLoading = true
+        this.isLoading = false
       }
     }
   }
